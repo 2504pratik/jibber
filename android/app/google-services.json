@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "738109437033",
+    "project_id": "jibber-655b6",
+    "storage_bucket": "jibber-655b6.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738109437033:android:3e3583e970e40a29555ef8",
+        "android_client_info": {
+          "package_name": "com.example.jibber"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "738109437033-84kdab56qg31bvectmbns89qdk5d8id8.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.jibber",
+            "certificate_hash": "a82ce88e64f3bee184ddd3d3cfc56a203681b23e"
+          }
+        },
+        {
+          "client_id": "738109437033-vv1mviv5nl7q7e4f9nfhhpo5vu8s4aob.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyANdtypkCqluMpf82vF-ZagWsrV_TqBkP4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "738109437033-vv1mviv5nl7q7e4f9nfhhpo5vu8s4aob.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
