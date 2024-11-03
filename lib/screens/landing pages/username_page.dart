@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:jibber/background/animated_background.dart';
+import 'package:jibber/screens/landing%20pages/username_reveal.dart';
 
 class UsernamePage extends StatefulWidget {
   const UsernamePage({super.key});
@@ -20,17 +21,19 @@ class _UsernamePageState extends State<UsernamePage>
   final List<String> _avatarImages = [
     'assets/cat.png',
     'assets/dog.png',
-    'assets/mokey.png',
+    'assets/monkey.png',
     'assets/panda.png',
     'assets/tiger.png',
   ];
 
   // Selected avatar
-  String _selectedAvatar = 'assets/cat.png';
+  late String _selectedAvatar;
 
   @override
   void initState() {
     super.initState();
+
+    _selectedAvatar = _avatarImages[Random().nextInt(_avatarImages.length)];
 
     _animationController = AnimationController(
       vsync: this,
@@ -75,7 +78,7 @@ class _UsernamePageState extends State<UsernamePage>
           const AnimatedBackground(height: 30),
           // Welcome Text
           Positioned(
-            top: 64,
+            top: MediaQuery.of(context).size.height * 0.1,
             left: 16,
             child: RichText(
               text: TextSpan(
@@ -93,6 +96,7 @@ class _UsernamePageState extends State<UsernamePage>
                     text: 'Jibber',
                     style: TextStyle(
                       fontSize: 48,
+                      fontFamily: 'Lobster',
                       fontWeight: FontWeight.bold,
                       foreground: Paint()
                         ..shader = const LinearGradient(
@@ -105,34 +109,26 @@ class _UsernamePageState extends State<UsernamePage>
                         ),
                     ),
                   ),
-                  const TextSpan(
-                    text: '.',
-                    style: TextStyle(
-                      fontSize: 48,
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFFFF9C89),
-                    ),
-                  ),
                 ],
               ),
             ),
           ),
           Container(
-            padding: const EdgeInsets.all(32),
+            padding: const EdgeInsets.all(24),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               mainAxisSize: MainAxisSize.min,
               children: [
-                // Avatar Selector
+                // Avatar
                 Stack(
                   alignment: Alignment.center,
                   children: [
                     // Glowing Border with Gradient
                     Container(
-                      width: 105, // Slightly larger than the avatar radius
-                      height: 105,
+                      width: 125, // Slightly larger than the avatar radius
+                      height: 125,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         gradient: const LinearGradient(
@@ -153,18 +149,10 @@ class _UsernamePageState extends State<UsernamePage>
 
                     // Avatar Circle with Image
                     CircleAvatar(
-                      radius: 50,
+                      radius: 60,
                       backgroundImage: AssetImage(_selectedAvatar),
                     ),
                   ],
-                ),
-                const SizedBox(height: 12),
-                const Text(
-                  "Tap to choose a fun avatar!",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
-                  ),
                 ),
                 const SizedBox(height: 24),
                 // Username TextField
@@ -204,15 +192,20 @@ class _UsernamePageState extends State<UsernamePage>
                   },
                 ),
                 const SizedBox(height: 16),
-
                 // Informative Text
-                const Text(
-                  "Create your unique profile!",
-                  style: TextStyle(
-                    color: Colors.white70,
-                    fontSize: 16,
+                const Align(
+                  alignment: Alignment.centerLeft,
+                  child: Padding(
+                    padding: EdgeInsets.all(2.0),
+                    child: Text(
+                      "Your username will have a special twist. Tap 'Continue' to see.",
+                      style: TextStyle(
+                        color: Colors.white,
+                      ),
+                    ),
                   ),
                 ),
+                const SizedBox(height: 8),
               ],
             ),
           ),
@@ -229,6 +222,13 @@ class _UsernamePageState extends State<UsernamePage>
                   if (_usernameController.text.isNotEmpty) {
                     // Handle username submission
                     print('Username: ${_usernameController.text}');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => UsernameRevealPage(
+                            baseUsername: _usernameController.text),
+                      ),
+                    );
                   }
                 },
                 style: ElevatedButton.styleFrom(
@@ -243,7 +243,7 @@ class _UsernamePageState extends State<UsernamePage>
                   ),
                 ),
                 child: const Text(
-                  'Continue',
+                  'Next',
                   style: TextStyle(
                     fontSize: 18,
                     color: Colors.white,
