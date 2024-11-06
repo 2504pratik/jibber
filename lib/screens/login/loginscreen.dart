@@ -110,10 +110,11 @@ class _LoginScreenState extends State<LoginScreen> {
                                   ),
                                 ),
                                 TextSpan(
-                                  text: 'Jibber',
+                                  text: 'Jibber.',
                                   style: TextStyle(
                                     fontSize: 48,
                                     fontWeight: FontWeight.bold,
+                                    fontFamily: 'Lobster',
                                     foreground: Paint()
                                       ..shader = const LinearGradient(
                                         colors: [
@@ -124,14 +125,6 @@ class _LoginScreenState extends State<LoginScreen> {
                                         const Rect.fromLTWH(
                                             0.0, 0.0, 200.0, 70.0),
                                       ),
-                                  ),
-                                ),
-                                const TextSpan(
-                                  text: '.',
-                                  style: TextStyle(
-                                    fontSize: 48,
-                                    fontWeight: FontWeight.bold,
-                                    color: Color(0xFFFF9C89),
                                   ),
                                 ),
                               ],

@@ -39,11 +39,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primaryColor: const Color(0xFFFF9C89),
       ),
-      initialRoute: '/username',
+      initialRoute: '/login',
       routes: {
-        '/splash': (context) => SplashScreen(),
+        '/splash': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),
-        '/username': (context) => UsernamePage(),
+        '/username': (context) => const UsernamePage(),
         '/home': (context) => const HomeScreen(),
       },
     );
