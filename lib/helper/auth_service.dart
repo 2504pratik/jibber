@@ -3,6 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
+import '../api/apis.dart';
+
 class AuthService {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -46,6 +48,29 @@ class AuthService {
       } else {
         // No username, navigate to UsernameInputPage
         Navigator.pushReplacementNamed(context, '/username');
+      }
+    }
+  }
+
+  // Save username
+  Future<void> saveUsername(BuildContext context, String username) async {
+    User? user = _auth.currentUser;
+    if (user != null) {
+      // Check if username is unique
+      if (await APIs.isUsernameUnique(username)) {
+        // Save username to Firestore
+        await APIs.createUser(username);
+        // Navigate to HomeScreen
+        Navigator.pushReplacementNamed(context, '/home');
+      } else {
+        // Username not unique, show error message
+        debugPrint('Username already taken.');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content:
+                Text('Username already taken. Please choose a different one.'),
+          ),
+        );
       }
     }
   }

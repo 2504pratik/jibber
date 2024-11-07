@@ -26,6 +26,7 @@ class APIs {
   static ChatUser me = ChatUser(
       id: user.uid,
       name: user.displayName.toString(),
+      username: '',
       email: user.email.toString(),
       about: "Hey, let's Jibber!",
       image: user.photoURL.toString(),
@@ -104,6 +105,16 @@ class APIs {
     }
   }
 
+  // Unique username
+  static Future<bool> isUsernameUnique(String username) async {
+    QuerySnapshot<Map<String, dynamic>> snapshot = await firestore
+        .collection('users')
+        .where('username', isEqualTo: username)
+        .get();
+
+    return snapshot.docs.isEmpty;
+  }
+
   // for checking if user exists or not?
   static Future<bool> userExists() async {
     return (await firestore.collection('users').doc(user.uid).get()).exists;
@@ -140,27 +151,30 @@ class APIs {
 
   // for getting current user info
   static Future<void> getSelfInfo() async {
-    await firestore.collection('users').doc(user.uid).get().then((user) async {
-      if (user.exists) {
-        me = ChatUser.fromJson(user.data()!);
+    await firestore
+        .collection('users')
+        .doc(user.uid)
+        .get()
+        .then((userDoc) async {
+      if (userDoc.exists) {
+        me = ChatUser.fromJson(userDoc.data()!);
         await getFirebaseMessagingToken();
 
-        //for setting user status to active
-        APIs.updateActiveStatus(true);
-        log('My Data: ${user.data()}');
-      } else {
-        await createUser().then((value) => getSelfInfo());
+        // Update user's active status
+        updateActiveStatus(true);
+        log('My Data: ${userDoc.data()}');
       }
     });
   }
 
   // for creating a new user
-  static Future<void> createUser() async {
+  static Future<void> createUser(String username) async {
     final time = DateTime.now().millisecondsSinceEpoch.toString();
 
     final chatUser = ChatUser(
         id: user.uid,
         name: user.displayName.toString(),
+        username: username,
         email: user.email.toString(),
         about: "Hey, let's Jibber!",
         image: user.photoURL.toString(),

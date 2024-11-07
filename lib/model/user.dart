@@ -3,6 +3,7 @@ class ChatUser {
     required this.image,
     required this.about,
     required this.name,
+    required this.username,
     required this.createdAt,
     required this.isOnline,
     required this.id,
@@ -13,6 +14,7 @@ class ChatUser {
   late String image;
   late String about;
   late String name;
+  late String username;
   late String createdAt;
   late bool isOnline;
   late String id;
@@ -24,6 +26,7 @@ class ChatUser {
     image = json['image'] ?? '';
     about = json['about'] ?? '';
     name = json['name'] ?? '';
+    username = json['username'] ?? '';
     createdAt = json['created_at'] ?? '';
     isOnline = json['is_online'] ?? '';
     id = json['id'] ?? '';
@@ -37,6 +40,7 @@ class ChatUser {
     data['image'] = image;
     data['about'] = about;
     data['name'] = name;
+    data['username'] = username;
     data['created_at'] = createdAt;
     data['is_online'] = isOnline;
     data['id'] = id;

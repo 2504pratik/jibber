@@ -40,11 +40,6 @@ class _UsernamePageState extends State<UsernamePage>
       duration: const Duration(milliseconds: 500),
     );
 
-    _borderColorAnimation = ColorTween(
-      begin: const Color(0xFF9C89FF).withOpacity(0.5),
-      end: Theme.of(context).colorScheme.primary,
-    ).animate(_animationController);
-
     _usernameController.addListener(() {
       if (_usernameController.text.isNotEmpty) {
         _animationController.forward();
@@ -52,6 +47,16 @@ class _UsernamePageState extends State<UsernamePage>
         _animationController.reverse();
       }
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    _borderColorAnimation = ColorTween(
+      begin: const Color(0xFF9C89FF).withOpacity(0.5),
+      end: const Color(0xFFFF9C89),
+    ).animate(_animationController);
   }
 
   // Method to select a random avatar
@@ -71,7 +76,7 @@ class _UsernamePageState extends State<UsernamePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
+      backgroundColor: const Color(0xFF1A1B1E),
       body: Stack(
         children: [
           // Animated Background
@@ -83,12 +88,12 @@ class _UsernamePageState extends State<UsernamePage>
             child: RichText(
               text: TextSpan(
                 children: [
-                  TextSpan(
+                  const TextSpan(
                     text: 'Welcome to,\n',
                     style: TextStyle(
                       fontSize: 48,
                       fontWeight: FontWeight.bold,
-                      color: Theme.of(context).colorScheme.onSurface,
+                      color: Colors.white,
                       height: 1.2,
                     ),
                   ),
@@ -99,10 +104,10 @@ class _UsernamePageState extends State<UsernamePage>
                       fontFamily: 'Lobster',
                       fontWeight: FontWeight.bold,
                       foreground: Paint()
-                        ..shader = LinearGradient(
+                        ..shader = const LinearGradient(
                           colors: [
-                            Theme.of(context).colorScheme.primary,
-                            Theme.of(context).colorScheme.secondary,
+                            Color(0xFFFF9C89),
+                            Color(0xFF9C89FF),
                           ],
                         ).createShader(
                           const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
@@ -131,10 +136,10 @@ class _UsernamePageState extends State<UsernamePage>
                       height: 125,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        gradient: LinearGradient(
+                        gradient: const LinearGradient(
                           colors: [
-                            Theme.of(context).colorScheme.primary,
-                            Theme.of(context).colorScheme.secondary,
+                            Color(0xFFFF9C89),
+                            Color(0xFF9C89FF),
                           ],
                         ),
                         boxShadow: [
@@ -161,7 +166,7 @@ class _UsernamePageState extends State<UsernamePage>
                   builder: (context, child) {
                     return TextField(
                       controller: _usernameController,
-                      cursorColor: Theme.of(context).colorScheme.secondary,
+                      cursorColor: const Color(0xFF9C89FF),
                       decoration: InputDecoration(
                         labelText: 'Username',
                         labelStyle: TextStyle(
@@ -194,14 +199,14 @@ class _UsernamePageState extends State<UsernamePage>
                 ),
                 const SizedBox(height: 16),
                 // Informative Text
-                Align(
+                const Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: const EdgeInsets.all(2.0),
+                    padding: EdgeInsets.all(2.0),
                     child: Text(
                       "Your username will have a special twist. Tap 'Continue' to see.",
                       style: TextStyle(
-                        color: Theme.of(context).colorScheme.onSurface,
+                        color: Colors.white,
                       ),
                     ),
                   ),
@@ -222,7 +227,7 @@ class _UsernamePageState extends State<UsernamePage>
                 onPressed: () {
                   if (_usernameController.text.isNotEmpty) {
                     // Handle username submission
-                    print('Username: ${_usernameController.text}');
+                    print('Username: ${_usernameController.text.trim()}');
                     Navigator.push(
                       context,
                       MaterialPageRoute(
@@ -237,17 +242,17 @@ class _UsernamePageState extends State<UsernamePage>
                     horizontal: 32,
                     vertical: 16,
                   ),
-                  backgroundColor: Theme.of(context).colorScheme.primary,
-                  shadowColor: Theme.of(context).colorScheme.secondary,
+                  backgroundColor: const Color(0xFFFF9C89),
+                  shadowColor: const Color(0xFF9C89FF),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: Text(
+                child: const Text(
                   'Next',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Theme.of(context).colorScheme.onPrimary,
+                    color: Colors.black54,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

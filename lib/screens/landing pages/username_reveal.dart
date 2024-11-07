@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:jibber/helper/auth_service.dart';
 import 'dart:math';
 
 import '../../helper/random_fact.dart';
@@ -216,8 +217,9 @@ class _UsernameRevealPageState extends State<UsernameRevealPage>
           height: 48,
           child: ElevatedButton(
             onPressed: () {
-              // Navigate to the next page or perform an action
-              print("Continue button pressed with username: $_fullUsername");
+              if (_fullUsername.isNotEmpty) {
+                AuthService().saveUsername(context, _fullUsername);
+              }
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Theme.of(context).colorScheme.primary,

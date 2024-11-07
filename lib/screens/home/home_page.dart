@@ -125,7 +125,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 : Text(
                     'Jibber',
                     style: TextStyle(
-                      fontSize: 28,
+                      fontSize: 32,
                       fontWeight: FontWeight.bold,
                       fontFamily: 'Lobster',
                       foreground: Paint()
