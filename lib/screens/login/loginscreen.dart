@@ -75,7 +75,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1B1E),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Stack(
         children: [
           const AnimatedBackground(
@@ -100,12 +100,13 @@ class _LoginScreenState extends State<LoginScreen> {
                           RichText(
                             text: TextSpan(
                               children: [
-                                const TextSpan(
+                                TextSpan(
                                   text: 'Chat, Connect,\n',
                                   style: TextStyle(
                                     fontSize: 48,
                                     fontWeight: FontWeight.bold,
-                                    color: Colors.white,
+                                    color:
+                                        Theme.of(context).colorScheme.onSurface,
                                     height: 1.2,
                                   ),
                                 ),
@@ -116,10 +117,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                     fontWeight: FontWeight.bold,
                                     fontFamily: 'Lobster',
                                     foreground: Paint()
-                                      ..shader = const LinearGradient(
+                                      ..shader = LinearGradient(
                                         colors: [
-                                          Color(0xFFFF9C89),
-                                          Color(0xFF9C89FF),
+                                          Theme.of(context).colorScheme.primary,
+                                          Theme.of(context)
+                                              .colorScheme
+                                              .secondary,
                                         ],
                                       ).createShader(
                                         const Rect.fromLTWH(

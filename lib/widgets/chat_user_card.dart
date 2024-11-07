@@ -26,6 +26,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
+      color: Theme.of(context).colorScheme.surface,
       margin: EdgeInsets.symmetric(horizontal: mq.width * .04, vertical: 4),
       elevation: 0.5,
       shape: const RoundedRectangleBorder(
@@ -56,20 +57,29 @@ class _ChatUserCardState extends State<ChatUserCard> {
                         builder: (_) => ProfileDialog(user: widget.user));
                   },
                   child: ProfileImage(
-                      size: mq.height * .055, url: widget.user.image),
+                    size: mq.height * .055,
+                    url: widget.user.image,
+                  ),
                 ),
 
                 //user name
-                title: Text(widget.user.name),
+                title: Text(
+                  widget.user.name,
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.onSurface,
+                  ),
+                ),
 
                 //last message
                 subtitle: Text(
-                    _message != null
-                        ? _message!.type == Type.image
-                            ? 'image'
-                            : _message!.msg
-                        : widget.user.about,
-                    maxLines: 1),
+                  _message != null
+                      ? _message!.type == Type.image
+                          ? 'image'
+                          : _message!.msg
+                      : widget.user.about,
+                  maxLines: 1,
+                  style: const TextStyle(color: Colors.white60),
+                ),
 
                 //last message time
                 trailing: _message == null
@@ -78,14 +88,15 @@ class _ChatUserCardState extends State<ChatUserCard> {
                             _message!.fromId != APIs.user.uid
                         ?
                         //show for unread message
-                        const SizedBox(
+                        SizedBox(
                             width: 15,
                             height: 15,
                             child: DecoratedBox(
                               decoration: BoxDecoration(
-                                  color: Color.fromARGB(255, 0, 230, 119),
-                                  borderRadius:
-                                      BorderRadius.all(Radius.circular(10))),
+                                  color:
+                                      Theme.of(context).colorScheme.secondary,
+                                  borderRadius: const BorderRadius.all(
+                                      Radius.circular(10))),
                             ),
                           )
                         :
@@ -93,7 +104,7 @@ class _ChatUserCardState extends State<ChatUserCard> {
                         Text(
                             MyDateUtil.getLastMessageTime(
                                 context: context, time: _message!.sent),
-                            style: const TextStyle(color: Colors.black54),
+                            style: const TextStyle(color: Colors.white60),
                           ),
               );
             },

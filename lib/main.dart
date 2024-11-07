@@ -37,9 +37,19 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Jibber',
       theme: ThemeData(
-        primaryColor: const Color(0xFFFF9C89),
+        colorScheme: const ColorScheme(
+          brightness: Brightness.light,
+          primary: Color(0xFFFF9C89),
+          onPrimary: Colors.black54,
+          secondary: Color(0xFF9C89FF),
+          onSecondary: Colors.black54,
+          error: Colors.red,
+          onError: Colors.black54,
+          surface: Color(0xFF1A1B1E),
+          onSurface: Colors.white,
+        ),
       ),
-      initialRoute: '/login',
+      initialRoute: '/splash',
       routes: {
         '/splash': (context) => const SplashScreen(),
         '/login': (context) => const LoginScreen(),

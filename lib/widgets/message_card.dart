@@ -23,68 +23,73 @@ class _MessageCardState extends State<MessageCard> {
   Widget build(BuildContext context) {
     bool isMe = APIs.user.uid == widget.message.fromId;
     return InkWell(
-        onLongPress: () => _showBottomSheet(isMe),
+        onLongPress: () => _showCompactOptionsMenu(isMe),
         child: isMe ? _greenMessage() : _blueMessage());
   }
 
   // sender or another user message
   Widget _blueMessage() {
-    //update last read message if sender and receiver are different
+    // Update last read message if sender and receiver are different
     if (widget.message.read.isEmpty) {
       APIs.updateMessageReadStatus(widget.message);
     }
 
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment: MainAxisAlignment.start, // Align message to the left
       children: [
-        //message content
+        // Message content and time
         Flexible(
-          child: Container(
-            padding: EdgeInsets.all(widget.message.type == Type.image
-                ? mq.width * .03
-                : mq.width * .04),
-            margin: EdgeInsets.symmetric(
-                horizontal: mq.width * .04, vertical: mq.height * .01),
-            decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 221, 245, 255),
-                border: Border.all(color: Colors.lightBlue),
-                //making borders curved
-                borderRadius: const BorderRadius.only(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Message bubble
+              Container(
+                padding: EdgeInsets.all(widget.message.type == Type.image
+                    ? mq.width * .03
+                    : mq.width * .04),
+                margin: EdgeInsets.symmetric(
+                    horizontal: mq.width * .04, vertical: mq.height * .01),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.primary,
+                  border: Border.all(color: Colors.deepOrange),
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30),
-                    bottomRight: Radius.circular(30))),
-            child: widget.message.type == Type.text
-                ?
-                //show text
-                Text(
-                    widget.message.msg,
-                    style: const TextStyle(fontSize: 15, color: Colors.black87),
-                  )
-                :
-                //show image
-                ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(15)),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.message.msg,
-                      fit: BoxFit.cover,
-                      placeholder: (context, url) => const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.image, size: 70),
-                    ),
+                    bottomRight: Radius.circular(30),
                   ),
-          ),
-        ),
+                ),
+                child: widget.message.type == Type.text
+                    ? Text(
+                        widget.message.msg,
+                        style: const TextStyle(
+                            fontSize: 15, color: Colors.black87),
+                      )
+                    : ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.message.msg,
+                          fit: BoxFit.cover,
+                          placeholder: (context, url) => const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.image, size: 70),
+                        ),
+                      ),
+              ),
 
-        //message time
-        Padding(
-          padding: EdgeInsets.only(right: mq.width * .04),
-          child: Text(
-            MyDateUtil.getFormattedTime(
-                context: context, time: widget.message.sent),
-            style: const TextStyle(fontSize: 13, color: Colors.black54),
+              // Message time below the bubble
+              Padding(
+                padding: EdgeInsets.only(left: mq.width * .04),
+                child: Text(
+                  MyDateUtil.getFormattedTime(
+                      context: context, time: widget.message.sent),
+                  style: const TextStyle(fontSize: 13, color: Colors.white54),
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -94,166 +99,166 @@ class _MessageCardState extends State<MessageCard> {
   // our or user message
   Widget _greenMessage() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      mainAxisAlignment:
+          MainAxisAlignment.end, // Align message to the right for sender
       children: [
-        //message time
-        Row(
-          children: [
-            //for adding some space
-            SizedBox(width: mq.width * .04),
-
-            //double tick blue icon for message read
-            if (widget.message.read.isNotEmpty)
-              const Icon(Icons.done_all_rounded, color: Colors.blue, size: 20),
-
-            //for adding some space
-            const SizedBox(width: 2),
-
-            //sent time
-            Text(
-              MyDateUtil.getFormattedTime(
-                  context: context, time: widget.message.sent),
-              style: const TextStyle(fontSize: 13, color: Colors.black54),
-            ),
-          ],
-        ),
-
-        //message content
+        // Message content and time
         Flexible(
-          child: Container(
-            padding: EdgeInsets.all(widget.message.type == Type.image
-                ? mq.width * .03
-                : mq.width * .04),
-            margin: EdgeInsets.symmetric(
-                horizontal: mq.width * .04, vertical: mq.height * .01),
-            decoration: BoxDecoration(
-                color: const Color.fromARGB(255, 218, 255, 176),
-                border: Border.all(color: Colors.lightGreen),
-                //making borders curved
-                borderRadius: const BorderRadius.only(
+          child: Column(
+            crossAxisAlignment:
+                CrossAxisAlignment.end, // Align content to the right
+            children: [
+              // Message bubble
+              Container(
+                padding: EdgeInsets.all(widget.message.type == Type.image
+                    ? mq.width * .03
+                    : mq.width * .04),
+                margin: EdgeInsets.symmetric(
+                    horizontal: mq.width * .04, vertical: mq.height * .01),
+                decoration: BoxDecoration(
+                  color: Theme.of(context).colorScheme.secondary,
+                  border: Border.all(color: Colors.deepPurple),
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30),
                     topRight: Radius.circular(30),
-                    bottomLeft: Radius.circular(30))),
-            child: widget.message.type == Type.text
-                ?
-                //show text
-                Text(
-                    widget.message.msg,
-                    style: const TextStyle(fontSize: 15, color: Colors.black87),
-                  )
-                :
-                //show image
-                ClipRRect(
-                    borderRadius: const BorderRadius.all(Radius.circular(15)),
-                    child: CachedNetworkImage(
-                      imageUrl: widget.message.msg,
-                      placeholder: (context, url) => const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      ),
-                      errorWidget: (context, url, error) =>
-                          const Icon(Icons.image, size: 70),
-                    ),
+                    bottomLeft: Radius.circular(30),
                   ),
+                ),
+                child: widget.message.type == Type.text
+                    ? Text(
+                        widget.message.msg,
+                        style: const TextStyle(
+                            fontSize: 15, color: Colors.black87),
+                      )
+                    : ClipRRect(
+                        borderRadius:
+                            const BorderRadius.all(Radius.circular(15)),
+                        child: CachedNetworkImage(
+                          imageUrl: widget.message.msg,
+                          placeholder: (context, url) => const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                          errorWidget: (context, url, error) =>
+                              const Icon(Icons.image, size: 70),
+                        ),
+                      ),
+              ),
+
+              // Message time below the bubble
+              Padding(
+                padding: EdgeInsets.only(right: mq.width * .04),
+                child: Row(
+                  mainAxisAlignment:
+                      MainAxisAlignment.end, // Time aligned to the right
+                  children: [
+                    // For adding some space
+                    SizedBox(width: mq.width * .04),
+
+                    // Sent time
+                    Text(
+                      MyDateUtil.getFormattedTime(
+                          context: context, time: widget.message.sent),
+                      style:
+                          const TextStyle(fontSize: 13, color: Colors.white54),
+                    ),
+
+                    const SizedBox(
+                      width: 4,
+                    ),
+                    // Double tick blue icon for message read
+                    if (widget.message.read.isNotEmpty)
+                      const Icon(Icons.done_all_rounded,
+                          color: Colors.blue, size: 20),
+                  ],
+                ),
+              ),
+            ],
           ),
         ),
       ],
     );
   }
 
-  // bottom sheet for modifying message details
-  void _showBottomSheet(bool isMe) {
-    showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-            borderRadius: BorderRadius.only(
-                topLeft: Radius.circular(20), topRight: Radius.circular(20))),
-        builder: (_) {
-          return ListView(
-            shrinkWrap: true,
+  void _showCompactOptionsMenu(bool isMe) {
+    showMenu(
+      color: Colors.black12,
+      context: context,
+      position: RelativeRect.fromLTRB(
+          mq.width * .7, mq.height * .1, 0, 0), // Adjust the position as needed
+      items: [
+        // Copy option
+        PopupMenuItem(
+          value: 'copy',
+          child: Row(
             children: [
-              //black divider
-              Container(
-                height: 4,
-                margin: EdgeInsets.symmetric(
-                    vertical: mq.height * .015, horizontal: mq.width * .4),
-                decoration: const BoxDecoration(
-                    color: Colors.grey,
-                    borderRadius: BorderRadius.all(Radius.circular(8))),
-              ),
-
-              //copy option
-              _OptionItem(
-                  icon: const Icon(Icons.copy_all_rounded,
-                      color: Colors.blue, size: 26),
-                  name: 'Copy Text',
-                  onTap: () async {
-                    await Clipboard.setData(
-                            ClipboardData(text: widget.message.msg))
-                        .then((value) {
-                      //for hiding bottom sheet
-                      Navigator.pop(context);
-
-                      Dialogs.showSnackbar(context, 'Text Copied!');
-                    });
-                  }),
-              //separator or divider
-              if (isMe)
-                Divider(
-                  color: Colors.black54,
-                  endIndent: mq.width * .04,
-                  indent: mq.width * .04,
+              const Icon(Icons.copy_all_rounded,
+                  color: Color(0xFF9C89FF), size: 26),
+              SizedBox(width: mq.width * .02),
+              const Text(
+                'Copy',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
                 ),
-
-              //edit option
-              if (widget.message.type == Type.text && isMe)
-                _OptionItem(
-                    icon: const Icon(Icons.edit, color: Colors.blue, size: 26),
-                    name: 'Edit Message',
-                    onTap: () {
-                      //for hiding bottom sheet
-                      Navigator.pop(context);
-
-                      _showMessageUpdateDialog();
-                    }),
-
-              //delete option
-              if (isMe)
-                _OptionItem(
-                    icon: const Icon(Icons.delete_forever,
-                        color: Colors.red, size: 26),
-                    name: 'Delete Message',
-                    onTap: () async {
-                      await APIs.deleteMessage(widget.message).then((value) {
-                        //for hiding bottom sheet
-                        Navigator.pop(context);
-                      });
-                    }),
-
-              //separator or divider
-              Divider(
-                color: Colors.black54,
-                endIndent: mq.width * .04,
-                indent: mq.width * .04,
               ),
-
-              //sent time
-              _OptionItem(
-                  icon: const Icon(Icons.remove_red_eye, color: Colors.blue),
-                  name:
-                      'Sent At: ${MyDateUtil.getMessageTime(context: context, time: widget.message.sent)}',
-                  onTap: () {}),
-
-              //read time
-              _OptionItem(
-                  icon: const Icon(Icons.remove_red_eye, color: Colors.green),
-                  name: widget.message.read.isEmpty
-                      ? 'Read At: Not seen yet'
-                      : 'Read At: ${MyDateUtil.getMessageTime(context: context, time: widget.message.read)}',
-                  onTap: () {}),
             ],
-          );
+          ),
+        ),
+
+        // Edit option (only if it's the sender's message and it's a text)
+        if (widget.message.type == Type.text && isMe)
+          PopupMenuItem(
+            value: 'edit',
+            child: Row(
+              children: [
+                Icon(Icons.edit,
+                    color: Theme.of(context).colorScheme.secondary, size: 26),
+                SizedBox(width: mq.width * .02),
+                const Text(
+                  'Edit',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+
+        // Delete option (only if it's the sender's message)
+        if (isMe)
+          PopupMenuItem(
+            value: 'delete',
+            child: Row(
+              children: [
+                Icon(Icons.delete_forever,
+                    color: Theme.of(context).colorScheme.primary, size: 26),
+                SizedBox(width: mq.width * .02),
+                const Text(
+                  'Delete',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16,
+                  ),
+                ),
+              ],
+            ),
+          ),
+      ],
+      elevation: 8.0,
+    ).then((value) {
+      // Handle menu item selection
+      if (value == 'copy') {
+        Clipboard.setData(ClipboardData(text: widget.message.msg)).then((_) {
+          Dialogs.showSnackbar(context, 'Text Copied!');
         });
+      } else if (value == 'edit' && isMe) {
+        _showMessageUpdateDialog();
+      } else if (value == 'delete' && isMe) {
+        APIs.deleteMessage(widget.message);
+      }
+    });
   }
 
   //dialog for updating message content
@@ -261,62 +266,63 @@ class _MessageCardState extends State<MessageCard> {
     String updatedMsg = widget.message.msg;
 
     showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-              contentPadding: const EdgeInsets.only(
-                  left: 24, right: 24, top: 20, bottom: 10),
+      context: context,
+      builder: (_) => AlertDialog(
+        contentPadding:
+            const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 10),
 
-              shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(20))),
+        shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.all(Radius.circular(20))),
 
-              //title
-              title: const Row(
-                children: [
-                  Icon(
-                    Icons.message,
-                    color: Colors.blue,
-                    size: 28,
-                  ),
-                  Text(' Update Message')
-                ],
-              ),
+        //title
+        title: const Row(
+          children: [
+            Icon(
+              Icons.message,
+              color: Colors.blue,
+              size: 28,
+            ),
+            Text(' Update Message')
+          ],
+        ),
 
-              //content
-              content: TextFormField(
-                initialValue: updatedMsg,
-                maxLines: null,
-                onChanged: (value) => updatedMsg = value,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(
-                        borderRadius: BorderRadius.all(Radius.circular(15)))),
-              ),
+        //content
+        content: TextFormField(
+          initialValue: updatedMsg,
+          maxLines: null,
+          onChanged: (value) => updatedMsg = value,
+          decoration: const InputDecoration(
+              border: OutlineInputBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(15)))),
+        ),
 
-              //actions
-              actions: [
-                //cancel button
-                MaterialButton(
-                    onPressed: () {
-                      //hide alert dialog
-                      Navigator.pop(context);
-                    },
-                    child: const Text(
-                      'Cancel',
-                      style: TextStyle(color: Colors.blue, fontSize: 16),
-                    )),
+        //actions
+        actions: [
+          //cancel button
+          MaterialButton(
+              onPressed: () {
+                //hide alert dialog
+                Navigator.pop(context);
+              },
+              child: const Text(
+                'Cancel',
+                style: TextStyle(color: Colors.blue, fontSize: 16),
+              )),
 
-                //update button
-                MaterialButton(
-                    onPressed: () {
-                      //hide alert dialog
-                      Navigator.pop(context);
-                      APIs.updateMessage(widget.message, updatedMsg);
-                    },
-                    child: const Text(
-                      'Update',
-                      style: TextStyle(color: Colors.blue, fontSize: 16),
-                    ))
-              ],
-            ));
+          //update button
+          MaterialButton(
+              onPressed: () {
+                //hide alert dialog
+                Navigator.pop(context);
+                APIs.updateMessage(widget.message, updatedMsg);
+              },
+              child: const Text(
+                'Update',
+                style: TextStyle(color: Colors.blue, fontSize: 16),
+              ))
+        ],
+      ),
+    );
   }
 }
 

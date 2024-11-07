@@ -101,16 +101,16 @@ class _UsernameRevealPageState extends State<UsernameRevealPage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1B1E),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1A1B1E),
+        backgroundColor: Theme.of(context).colorScheme.surface,
         centerTitle: true,
         automaticallyImplyLeading: false,
         title: ShaderMask(
-          shaderCallback: (bounds) => const LinearGradient(
+          shaderCallback: (bounds) => LinearGradient(
             colors: [
-              Color(0xFFFF9C89),
-              Color(0xFF9C89FF),
+              Theme.of(context).colorScheme.primary,
+              Theme.of(context).colorScheme.secondary,
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -133,12 +133,12 @@ class _UsernameRevealPageState extends State<UsernameRevealPage>
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Congratulations Text
-            const Text(
+            Text(
               "Wohhh!!!",
               style: TextStyle(
                 fontSize: 28,
                 fontWeight: FontWeight.bold,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onSurface,
               ),
             ),
             const SizedBox(height: 16),
@@ -147,10 +147,10 @@ class _UsernameRevealPageState extends State<UsernameRevealPage>
             FadeTransition(
               opacity: _opacityAnimation,
               child: ShaderMask(
-                shaderCallback: (bounds) => const LinearGradient(
+                shaderCallback: (bounds) => LinearGradient(
                   colors: [
-                    Color(0xFFFF9C89),
-                    Color(0xFF9C89FF),
+                    Theme.of(context).colorScheme.primary,
+                    Theme.of(context).colorScheme.secondary,
                   ],
                   begin: Alignment.topLeft,
                   end: Alignment.bottomRight,
@@ -220,17 +220,17 @@ class _UsernameRevealPageState extends State<UsernameRevealPage>
               print("Continue button pressed with username: $_fullUsername");
             },
             style: ElevatedButton.styleFrom(
-              backgroundColor: const Color(0xFFFF9C89),
-              shadowColor: const Color(0xFF9C89FF),
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              shadowColor: Theme.of(context).colorScheme.secondary,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: const Text(
+            child: Text(
               "Continue",
               style: TextStyle(
                 fontSize: 18,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onPrimary,
                 fontWeight: FontWeight.bold,
               ),
             ),

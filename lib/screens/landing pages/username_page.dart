@@ -42,7 +42,7 @@ class _UsernamePageState extends State<UsernamePage>
 
     _borderColorAnimation = ColorTween(
       begin: const Color(0xFF9C89FF).withOpacity(0.5),
-      end: const Color(0xFFFF9C89),
+      end: Theme.of(context).colorScheme.primary,
     ).animate(_animationController);
 
     _usernameController.addListener(() {
@@ -71,7 +71,7 @@ class _UsernamePageState extends State<UsernamePage>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1B1E),
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: Stack(
         children: [
           // Animated Background
@@ -83,12 +83,12 @@ class _UsernamePageState extends State<UsernamePage>
             child: RichText(
               text: TextSpan(
                 children: [
-                  const TextSpan(
+                  TextSpan(
                     text: 'Welcome to,\n',
                     style: TextStyle(
                       fontSize: 48,
                       fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                      color: Theme.of(context).colorScheme.onSurface,
                       height: 1.2,
                     ),
                   ),
@@ -99,10 +99,10 @@ class _UsernamePageState extends State<UsernamePage>
                       fontFamily: 'Lobster',
                       fontWeight: FontWeight.bold,
                       foreground: Paint()
-                        ..shader = const LinearGradient(
+                        ..shader = LinearGradient(
                           colors: [
-                            Color(0xFFFF9C89),
-                            Color(0xFF9C89FF),
+                            Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.secondary,
                           ],
                         ).createShader(
                           const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
@@ -131,10 +131,10 @@ class _UsernamePageState extends State<UsernamePage>
                       height: 125,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        gradient: const LinearGradient(
+                        gradient: LinearGradient(
                           colors: [
-                            Color(0xFFFF9C89),
-                            Color(0xFF9C89FF),
+                            Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.secondary,
                           ],
                         ),
                         boxShadow: [
@@ -161,6 +161,7 @@ class _UsernamePageState extends State<UsernamePage>
                   builder: (context, child) {
                     return TextField(
                       controller: _usernameController,
+                      cursorColor: Theme.of(context).colorScheme.secondary,
                       decoration: InputDecoration(
                         labelText: 'Username',
                         labelStyle: TextStyle(
@@ -193,14 +194,14 @@ class _UsernamePageState extends State<UsernamePage>
                 ),
                 const SizedBox(height: 16),
                 // Informative Text
-                const Align(
+                Align(
                   alignment: Alignment.centerLeft,
                   child: Padding(
-                    padding: EdgeInsets.all(2.0),
+                    padding: const EdgeInsets.all(2.0),
                     child: Text(
                       "Your username will have a special twist. Tap 'Continue' to see.",
                       style: TextStyle(
-                        color: Colors.white,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                     ),
                   ),
@@ -236,17 +237,17 @@ class _UsernamePageState extends State<UsernamePage>
                     horizontal: 32,
                     vertical: 16,
                   ),
-                  backgroundColor: const Color(0xFFFF9C89),
-                  shadowColor: const Color(0xFF9C89FF),
+                  backgroundColor: Theme.of(context).colorScheme.primary,
+                  shadowColor: Theme.of(context).colorScheme.secondary,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text(
+                child: Text(
                   'Next',
                   style: TextStyle(
                     fontSize: 18,
-                    color: Colors.white,
+                    color: Theme.of(context).colorScheme.onPrimary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

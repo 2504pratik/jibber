@@ -21,12 +21,6 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
     Future.delayed(const Duration(seconds: 2), () {
-      //exit full-screen
-      // SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-      // SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      //     systemNavigationBarColor: Colors.white,
-      //     statusBarColor: Colors.white));
-
       log('\nUser: ${APIs.auth.currentUser}');
 
       //navigate
@@ -62,12 +56,13 @@ class _SplashScreenState extends State<SplashScreen> {
               text: 'Jibber',
               style: TextStyle(
                 fontSize: 48,
+                fontFamily: 'Lobster',
                 fontWeight: FontWeight.bold,
                 foreground: Paint()
-                  ..shader = const LinearGradient(
+                  ..shader = LinearGradient(
                     colors: [
-                      Color(0xFFFF9C89),
-                      Color(0xFF9C89FF),
+                      Theme.of(context).colorScheme.primary,
+                      Theme.of(context).colorScheme.secondary,
                     ],
                   ).createShader(
                     const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),

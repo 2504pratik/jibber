@@ -12,7 +12,6 @@ import '../../widgets/chat_user_card.dart';
 import '../../widgets/profile_image.dart';
 import '../profile/profile_screen.dart';
 
-//home screen -- where all available contacts are shown
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
 
@@ -59,17 +58,6 @@ class _HomeScreenState extends State<HomeScreen> {
       //for hiding keyboard when a tap is detected on screen
       onTap: FocusScope.of(context).unfocus,
       child: PopScope(
-        // onWillPop: () {
-        //   if (_isSearching) {
-        //     setState(() {
-        //       _isSearching = !_isSearching;
-        //     });
-        //     return Future.value(false);
-        //   } else {
-        //     return Future.value(true);
-        //   }
-        // },
-
         //if search is on & back button is pressed then close search
         //or else simple close current screen on back button click
         canPop: false,
@@ -86,8 +74,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
         //
         child: Scaffold(
+          backgroundColor: Theme.of(context).colorScheme.surface,
           //app bar
           appBar: AppBar(
+            backgroundColor: Theme.of(context).colorScheme.surface,
             //view profile
             leading: IconButton(
               tooltip: 'View Profile',
@@ -95,7 +85,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (_) => ProfileScreen(user: APIs.me)),
+                    builder: (_) => ProfileScreen(user: APIs.me),
+                  ),
                 );
               },
               icon: const ProfileImage(size: 32),
@@ -104,10 +95,17 @@ class _HomeScreenState extends State<HomeScreen> {
             //title
             title: _isSearching
                 ? TextField(
+                    cursorColor: Theme.of(context).colorScheme.secondary,
                     decoration: const InputDecoration(
-                        border: InputBorder.none, hintText: 'Name, Email, ...'),
+                      border: InputBorder.none,
+                      hintText: 'Search using username...',
+                    ),
                     autofocus: true,
-                    style: const TextStyle(fontSize: 17, letterSpacing: 0.5),
+                    style: TextStyle(
+                      fontSize: 17,
+                      letterSpacing: 0.5,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                     //when search text changes then updated search list
                     onChanged: (val) {
                       //search logic
@@ -124,15 +122,34 @@ class _HomeScreenState extends State<HomeScreen> {
                       setState(() => _searchList);
                     },
                   )
-                : const Text('Jibber'),
+                : Text(
+                    'Jibber',
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      fontFamily: 'Lobster',
+                      foreground: Paint()
+                        ..shader = LinearGradient(
+                          colors: [
+                            Theme.of(context).colorScheme.primary,
+                            Theme.of(context).colorScheme.secondary,
+                          ],
+                        ).createShader(
+                          const Rect.fromLTWH(0.0, 0.0, 200.0, 70.0),
+                        ),
+                    ),
+                  ),
             actions: [
               //search user button
               IconButton(
                 tooltip: 'Search',
                 onPressed: () => setState(() => _isSearching = !_isSearching),
-                icon: Icon(_isSearching
-                    ? CupertinoIcons.clear_circled_solid
-                    : CupertinoIcons.search),
+                icon: Icon(
+                  _isSearching
+                      ? CupertinoIcons.clear_circled_solid
+                      : CupertinoIcons.search,
+                  color: Theme.of(context).colorScheme.onSurface,
+                ),
               ),
             ],
           ),
@@ -141,9 +158,13 @@ class _HomeScreenState extends State<HomeScreen> {
           floatingActionButton: Padding(
             padding: const EdgeInsets.only(bottom: 10),
             child: FloatingActionButton(
-              backgroundColor: Colors.white,
-              onPressed: _addChatUserDialog,
-              child: const Icon(CupertinoIcons.person_add, size: 25),
+              backgroundColor: Colors.black,
+              onPressed: _showAddChatUserBottomSheet,
+              child: Icon(
+                CupertinoIcons.person_add,
+                size: 25,
+                color: Theme.of(context).colorScheme.onSurface,
+              ),
             ),
           ),
 
@@ -214,81 +235,117 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  // for adding new chat user
-  void _addChatUserDialog() {
+  void _showAddChatUserBottomSheet() {
     String email = '';
 
-    showDialog(
+    showModalBottomSheet(
       context: context,
-      builder: (_) => AlertDialog(
-        contentPadding:
-            const EdgeInsets.only(left: 24, right: 24, top: 20, bottom: 10),
-
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(15)),
-        ),
-
-        //title
-        title: const Row(
-          children: [
-            Icon(
-              Icons.person_add,
-              color: Colors.blue,
-              size: 28,
-            ),
-            Text('  Add User')
-          ],
-        ),
-
-        //content
-        content: TextFormField(
-          maxLines: null,
-          onChanged: (value) => email = value,
-          decoration: const InputDecoration(
-            hintText: 'Email Id',
-            prefixIcon: Icon(Icons.email, color: Colors.blue),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.all(Radius.circular(15)),
-            ),
-          ),
-        ),
-
-        //actions
-        actions: [
-          //cancel button
-          MaterialButton(
-            onPressed: () {
-              //hide alert dialog
-              Navigator.pop(context);
-            },
-            child: const Text(
-              'Cancel',
-              style: TextStyle(color: Colors.blue, fontSize: 16),
-            ),
-          ),
-
-          //add button
-          MaterialButton(
-            onPressed: () async {
-              //hide alert dialog
-              Navigator.pop(context);
-              if (email.trim().isNotEmpty) {
-                await APIs.addChatUser(email).then(
-                  (value) {
-                    if (!value) {
-                      Dialogs.showSnackbar(context, 'User does not Exists!');
-                    }
-                  },
-                );
-              }
-            },
-            child: const Text(
-              'Add',
-              style: TextStyle(color: Colors.blue, fontSize: 16),
-            ),
-          )
-        ],
+      isScrollControlled: true,
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
+      builder: (_) {
+        return Padding(
+          padding: EdgeInsets.only(
+            left: 24,
+            right: 24,
+            top: 24,
+            bottom: MediaQuery.of(context).viewInsets.bottom +
+                24, // Adjust for keyboard
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Title with animated icon
+              Text(
+                'Add a New Friend',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.onSurface,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 16),
+
+              // Username input field
+              TextFormField(
+                onChanged: (value) => email = value,
+                style: const TextStyle(color: Colors.white),
+                decoration: InputDecoration(
+                  hintText: 'Username',
+                  hintStyle: const TextStyle(color: Colors.white54),
+                  prefixIcon: Icon(
+                    Icons.person_add_alt_rounded,
+                    color: Theme.of(context).colorScheme.secondary,
+                    size: 28,
+                  ),
+                  filled: true,
+                  fillColor: Colors.grey[800],
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                    borderSide: BorderSide.none,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 20),
+
+              // Add button with gradient styling
+              Center(
+                child: SizedBox(
+                  width: 200,
+                  child: Ink(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [
+                          Theme.of(context).colorScheme.primary,
+                          Theme.of(context).colorScheme.secondary,
+                        ],
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                      ),
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors
+                            .transparent, // Make button background transparent
+                        shadowColor: Colors.transparent, // Remove any shadow
+                        padding: const EdgeInsets.symmetric(vertical: 14),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                      ),
+                      onPressed: () async {
+                        Navigator.pop(context);
+                        if (email.trim().isNotEmpty) {
+                          await APIs.addChatUser(email).then(
+                            (value) {
+                              if (!value) {
+                                Dialogs.showSnackbar(
+                                    context, 'User does not exist!');
+                              }
+                            },
+                          );
+                        }
+                      },
+                      child: Text(
+                        'Send Invite',
+                        style: TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onSurface,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
     );
   }
 }
